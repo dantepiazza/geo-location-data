@@ -1,0 +1,16 @@
+{
+    "name": "dantepiazza/geo-location-data",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Dantepiazza\\GeoLocationData\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Dante Piazza Quiroga",
+            "email": "dante.7h@gmail.com"
+        }
+    ],
+    "require": {}
+}
