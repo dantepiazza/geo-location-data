@@ -103,22 +103,3 @@ class Location {
         return $this -> _get($this -> _cities, 'id', $id);
     }
 }
-
-
-print_r(json_encode((new Location()) -> search('Lujan')));
-//Country::get();
-//Country::search();
-
-//State::all();
-//State::get();
-//State::search();
-
-//County::all();
-//County::get();
-//County::search();
-
-//City::all();
-//City::get();
-//City::search();
-
-//Location::search();
