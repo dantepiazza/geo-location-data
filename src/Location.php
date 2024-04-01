@@ -19,26 +19,48 @@ class Location {
         }
 
         foreach($this -> _cities as $city){
-            $country = $this -> country('id', $city -> country_id);
-            $state = $this -> state($city -> state_id);
-            $county = $this -> county($city -> county_id);
-            
-            $this -> _locations[] = (object) [
-                'country_id' => $country -> id,
-                'country_name' => $country -> name,
+            $this -> _locations[] = $this -> location($city);
+        }
+    }
 
-                'state_id' => $state -> id,
-                'state_name' => $state -> name,
-
-                'county_id' => $county -> id,
-                'county_name' => $county -> name,
-
-                'city_id' => $city -> id,
-                'city_name' => $city -> name,
-                'zip_code' => $city -> zip_code,
-                'name' => $city -> name.' ('.$city -> zip_code.'), '.$state -> name.', '.$country -> name,
+    private function location($city){
+        if(!$city) { 
+            return (object) [
+                'country_id' => 0,
+                'country_name' => '',
+    
+                'state_id' => 0,
+                'state_name' => '',
+    
+                'county_id' => 0,
+                'county_name' => '',
+    
+                'city_id' => 0,
+                'city_name' => '',
+                'zip_code' => '',
+                'name' => '',
             ];
         }
+
+        $country = $this -> country('id', $city -> country_id);
+        $state = $this -> state($city -> state_id);
+        $county = $this -> county($city -> county_id);
+        
+        return (object) [
+            'country_id' => $country -> id,
+            'country_name' => $country -> name,
+
+            'state_id' => $state -> id,
+            'state_name' => $state -> name,
+
+            'county_id' => $county -> id,
+            'county_name' => $county -> name,
+
+            'city_id' => $city -> id,
+            'city_name' => $city -> name,
+            'zip_code' => $city -> zip_code,
+            'name' => $city -> name.' ('.$city -> zip_code.'), '.$state -> name.', '.$country -> name,
+        ];
     }
 
     private function load_json_data($source = null) {
@@ -59,16 +81,20 @@ class Location {
 
     private function _search($items, $key, $value, $strict = true){
          return array_filter($items, static function($item) use ($key, $value) {
-            return str_contains($item -> {$key}, $value);
+            return str_contains(strtolower($item -> {$key}), strtolower($value));
         });
     }
     
     public function all(){
         return $this -> _locations;
     }
-    
+
     public function search(string $query){
         return $this -> _search($this -> _locations, 'name', $query, false);
+    }
+
+    public function get(int $city){
+        return $this -> location($this -> city($city));
     }
 
     public function countries(){
